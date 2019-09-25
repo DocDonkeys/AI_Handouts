@@ -5,13 +5,13 @@
 * Quarters (Sleep)
 * Infirmary (Heal)
 * Canteen (Eat)
-Extra: Courtyard (Roam)
+* Extra: Courtyard (Roam)
 
 3 AI Archetypes
 * Guard
 * Assistant
 * Slave
-Extra: Captain
+* Extra: Captain
 
 Core of Interactions: Human Basic Needs
 * Health
@@ -24,6 +24,6 @@ Core of Interactions: Human Basic Needs
 2 Time shifts
 * Daytime (Routine)
 * Nightime (Sneaking)
-Extra: Boarding (Combat)
+* Extra: Boarding (Combat)
 
 Disclaimer: All "Extra" features are ideas only thought of implementation in case development goes smoothly as a content upgrade.
