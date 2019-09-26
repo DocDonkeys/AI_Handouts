@@ -2,7 +2,7 @@
 "God" management game where you handle the resource management of a pirate ship as they struggle to making ends meet with their slave business, needing basic supplies which are scarce in the sea while making sure that a mutiny or their own stupidity doesn't kill them. Made by two UPC students in the Game Development Bachelor's Degree
 
 ## Design
-Your job is to handle the supplies needed to take care of the crew: food, water, medicines, and booze are some of the resources that you will need to manage to keep them in shape. Your main form of income is to buy and sell slaves on lawless shores, and these need the same resources as your crew as they are worth nothing dead.
+Your job is to handle the supplies needed to take care of the crew: food, water, medicines, and booze are some of the resources that you will need to manage to keep them in shape. Your main form of income is to buy and sell slaves on lawless shores, and these need the same resources as your crew because they are worth nothing dead.
 
 However, these same slaves are waiting for every chance, every misstep to take control of the ship, and if the crew is too unhappy with your management, they might just let them or mutiny themselves.
 
