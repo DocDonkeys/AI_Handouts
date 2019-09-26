@@ -6,7 +6,7 @@ Your job is to handle the supplies needed to take care of the crew: food, water,
 
 However, these same slaves are waiting for every chance, every misstep to take control of the ship, and if the crew is too unhappy with your management, they might just let them or mutiny themselves.
 
-The prices on each port are different because of supply and demand so while there’s profit to be made, it is will be a risky business as you gamble buying and selling assets and slaves that later might not be worth the investment. Both the market and your crew will be terribly unforgiving.
+The prices on each port are different because of supply and demand so while there’s profit to be made, it will be a risky business as you gamble buying and selling slaves and assets that later might not be worth the investment. Both the market and your crew will be terribly unforgiving.
 
 ## Main Mechanics
 ### 3 Game Areas
