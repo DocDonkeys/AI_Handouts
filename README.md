@@ -26,4 +26,4 @@ Core of Interactions: Human Basic Needs
 * Nightime (Sneaking)
 * Extra: Boarding (Combat)
 
-Disclaimer: All "Extra" features are ideas only thought of implementation in case development goes smoothly as a content upgrade.
+Disclaimer: All "Extra" features are ideas only thought of implementation as a content upgrade in case development goes smoothly.
