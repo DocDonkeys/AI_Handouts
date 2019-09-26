@@ -1,4 +1,4 @@
-# Petty Pirates
+# Mutiny!
 "God" management game where you handle the resource management of a pirate ship as they struggle to making ends meet with their slave business, needing basic supplies which are scarce in the sea while making sure that a mutiny or their own stupidity doesn't kill them. Made by two UPC students in the Game Development Bachelor's Degree
 
 3 Game Areas
