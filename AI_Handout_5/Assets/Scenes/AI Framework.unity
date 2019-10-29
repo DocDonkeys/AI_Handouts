@@ -1476,9 +1476,11 @@ MonoBehaviour:
   obstacles:
     serializedVersion: 2
     m_Bits: 1536
-  area: 0
+  contact: 1
   radius: 5
-  cone: 1
+  hearing: 1
+  distance: 15
+  sight: 1
   vision: {fileID: 384830319}
 --- !u!54 &384830321
 Rigidbody:
@@ -3048,9 +3050,11 @@ MonoBehaviour:
   obstacles:
     serializedVersion: 2
     m_Bits: 1536
-  area: 0
+  contact: 1
   radius: 5
-  cone: 1
+  hearing: 1
+  distance: 15
+  sight: 1
   vision: {fileID: 925723628}
 --- !u!114 &925723627
 MonoBehaviour:

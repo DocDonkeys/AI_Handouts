@@ -7,18 +7,22 @@ public class AIPercieve : MonoBehaviour
     public LayerMask targets;
     public LayerMask obstacles;
 
-    [Header("Area")]
-    public bool area = true;
+    [Header("Contact")]
+    public bool contact = true;
     public float radius = 5.0f;
 
-    [Header("Cone")]
-    public bool cone = true;
+    [Header("Hearing")]
+    public bool hearing = true;
+    public float distance = 15.0f;
+
+    [Header("Sight")]
+    public bool sight = true;
     public Camera vision;
 
     private float visionDistance;
     private float colliderSearchRadius;
 
-    private List<GameObject> detected;
+    private List<GameObject> detected = new List<GameObject>();
     private Collider myCollider;
 
     // Start is called before the first frame update
@@ -29,10 +33,8 @@ public class AIPercieve : MonoBehaviour
 
         visionDistance = vision.farClipPlane / Mathf.Cos(vision.fieldOfView / 2.0f);  // Make cone radius out of FOV angle and farClipPlane distance from camera
 
-        if (visionDistance > radius)    // Use the largest distance from the two perceptions (Area/Vision) for collider detection
-            colliderSearchRadius = visionDistance;
-        else
-            colliderSearchRadius = radius;
+        colliderSearchRadius = Mathf.Max(visionDistance, distance);
+        colliderSearchRadius = Mathf.Max(colliderSearchRadius, radius); // Use the largest area of perception for collecting in a sphere
     }
 
     // Update is called once per frame
@@ -41,44 +43,79 @@ public class AIPercieve : MonoBehaviour
         Collider[] colliders = Physics.OverlapSphere(transform.position, colliderSearchRadius, targets);
         Plane[] planes = GeometryUtility.CalculateFrustumPlanes(vision);
 
-        for (int i = 0; i < colliders.Length; i++)
+        List<PerceptionEvent> currently_percieving = new List<PerceptionEvent>();   // Record of all perceived objects and the method used for detection
+
+        foreach (Collider col in colliders)
         {
-            if (colliders[i] != myCollider) // If collider isn't from the agent who's scanning
+            if (col != myCollider) // If collider isn't from the agent who's scanning
             {
-                PerceptionEvent eventData = null;
-                Vector3 targetDistance = colliders[i].transform.position - transform.position;
+                PerceptionEvent foundData = new PerceptionEvent();
+                Vector3 targetVector = col.transform.position - transform.position;
+                float targetDistance = targetVector.magnitude;
 
-                if (cone && GeometryUtility.TestPlanesAABB(planes, colliders[i].bounds))    // If sound detection ON and inside detection radius
+                bool inRange = false;
+
+                if (sight && GeometryUtility.TestPlanesAABB(planes, col.bounds))   // In vision FOV
                 {
-                    eventData.sense = PerceptionEvent.senses.VISION;
+                    foundData.sense = PerceptionEvent.senses.VISION;
+                    inRange = true;
                 }
-                else if (area && targetDistance.magnitude < radius) // If visual detection ON and inside camera FOV
+                else if (hearing && targetDistance < distance)    // In hearing range
                 {
-                    eventData.sense = PerceptionEvent.senses.SOUND;
+                    foundData.sense = PerceptionEvent.senses.SOUND;
+                    inRange = true;
                 }
+                else if (contact && targetDistance < radius)  // In contact distance
                 {
-                    if (!Physics.Raycast(transform.position, targetDistance, targetDistance.magnitude, obstacles))  // If no obstacles in the way
-                    {
-                        bool already_seen = false;
-
-                        for (int j = 0; j < detected.Count; j++)
-                        {
-                            if (detected[i] == colliders[i].gameObject)
-                            {
-                                already_seen = true;
-                                break;
-                            }
-                        }
-
-                        if (!already_seen)
-                        {
-                            //eventData.go = colliders[i].gameObject;
-                            //eventData.type = PerceptionEvent.types.NEW;
-
-                            //SendMessage(PerceptionEvent, eventData);
-                        }
-                    }
+                    foundData.sense = PerceptionEvent.senses.CONTACT;
+                    inRange = true;
                 }
+
+                if (inRange && !Physics.Raycast(transform.position, targetVector, targetDistance, obstacles))  // If no obstacles in the way
+                {
+                    foundData.go = col.gameObject;
+                    currently_percieving.Add(foundData);   // We list all that we percieve
+                }
+            }
+        }
+        
+        // The following process consists in matching both lists and pair their objects, the ones that remain unpaired must be updated in the "detected" list
+        bool[] detectedgMatch = new bool[detected.Count];
+        bool[] percievingMatch = new bool[currently_percieving.Count];  // These arrays will flag the pairing of the content in the same index positions
+                                                                        // Ask Marc: We could use a "index list" for the same purpose, should we?
+        for (int i = 0; i < detected.Count; i++)
+        {
+            for (int j = 0; j < currently_percieving.Count; j++)
+            {
+                if (detected[i] == currently_percieving[i].go)  // If objects match in both lists, it means what I remember what I just percieved
+                {
+                    detectedgMatch[i] = true;   // We flag the booleans at their corresponding indexes
+                    percievingMatch[j] = true;
+                    break;
+                }
+            }
+        }
+
+        // We iterate the boolean arrays, were unpaired objects are marked with false flags
+        for (int i = detected.Count - 1; i >= 0; i--)
+        {
+            if (detectedgMatch[i] == false) // If an object that was remembered to be detected isn't percieved currently, it is LOST
+            {
+                PerceptionEvent lostData = new PerceptionEvent();
+                lostData.go = detected[i];
+                lostData.type = PerceptionEvent.types.LOST;
+                SendMessage("PerceptionEvent", lostData);
+                detected.RemoveAt(i);
+            }
+        }
+
+        for (int i = currently_percieving.Count - 1; i >= 0; i--)   // If a currently percieved object isn't remembered, we need to add it to "memory" as NEW
+        {
+            if (percievingMatch[i] == false)
+            {
+                currently_percieving[i].type = PerceptionEvent.types.NEW;
+                SendMessage("PerceptionEvent", currently_percieving[i]);
+                detected.Add(currently_percieving[i].go);
             }
         }
     }

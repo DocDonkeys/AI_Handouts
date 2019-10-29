@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PerceptionEvent
 {
-	public enum senses { VISION, SOUND };
+	public enum senses { VISION, SOUND, CONTACT };
 	public enum types { NEW, LOST };
 
 	public GameObject go;
