@@ -27,13 +27,20 @@ public class FSM_Alarm : MonoBehaviour {
 
     // TODO 1: Create a coroutine that executes 20 times per second
     // and goes forever. Make sure to trigger it from Start()
+    IEnumerator Patroling()
+    {
+        while (true)
+        {
+            Debug.Log(Time.time.ToString());
+            yield return new WaitForSeconds(0.05f);
+        }
+    }
 
     // Use this for initialization
     void Start()
     {
-
+        StartCoroutine("Patroling");
     }
-
 
     // TODO 2: If player is spotted, jump to another coroutine that should
     // execute 20 times per second waiting for the player to reach the alarm
